@@ -35,7 +35,7 @@ class irc_bot(asyncore.dispatcher):
    def handle_read(self):
        try:
             serv_data_rec = (self.recv ( 4096 )).decode("utf-8")
-       except Exception, e:
+       except Exception as e:
             serv_data_rec=""
             print(e)
        if serv_data_rec.find ( "PING" ) != -1:
@@ -51,7 +51,7 @@ class irc_bot(asyncore.dispatcher):
             self.irc_message( line, chan )
    
    def handle_write(self):
-       self.send(self.send_buf)
+       self.send((self.send_buf).encode("utf-8"))
        self.send_buf=""
    
    def handle_close(self):
@@ -64,7 +64,7 @@ class irc_bot(asyncore.dispatcher):
    
    def irc_send( self, to_send ):
        self.send_Lock.acquire()
-       self.send_buf=self.send_buf+(to_send+"\r\n").encode("utf-8")
+       self.send_buf=self.send_buf+to_send+"\r\n"
        self.send_Lock.release()
    
    def irc_set_nick( self, nick ):
@@ -101,7 +101,7 @@ class irc_bot(asyncore.dispatcher):
            date=str(now.hour)+":"+str(now.minute)+":"+str(now.second)
            f.write( date+line )
            f.close()
-       except Exception, e:
+       except Exception as e:
            print(e)
    
    def irc_quit( self ):

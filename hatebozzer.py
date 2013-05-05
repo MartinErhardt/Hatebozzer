@@ -12,6 +12,7 @@ def main():
         try:# still on Pyhon 2.X
             inp = raw_input(">")
         except NameError:# We are running on Python 3
+        
             inp = input(">")
         interpreter_main.interprete_line(inp,0)
     sys.exit(0)

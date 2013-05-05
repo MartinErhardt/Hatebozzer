@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import os
-import threading, thread
+import threading
+try:
+    import _thread
+except ImportError:
+    import thread
 import sys
 import asyncore
 from bot import irc_bot
@@ -10,7 +14,7 @@ import bot
 #import hatebozzer
 
 class interpreter(threading.Thread):
-    def __init__( self, path): 
+    def __init__( self, path ): 
         try:
             f = open(path,'r')
             self.script_lines=f.read().split("\n")
@@ -21,7 +25,7 @@ class interpreter(threading.Thread):
         self.path=path
         self.var_names=[]
         self.var_val=[]
-        self.builtin_func=("/connect","/nick","/user","/join","/say","/print","/quit")
+        self.builtin_func=("/connect","/nick","/user","/join","/say","/print","/quit","/help")
         threading.Thread.__init__( self )
     
     def run(self):
@@ -72,7 +76,10 @@ class interpreter(threading.Thread):
         if name in self.builtin_func:
             try:
                 if name == "/connect":
-                    thread.start_new_thread(bot.bot_thread_entry,(arg_list[0],6667,arg_list[1],arg_list[2],arg_list[3],) )
+                    try:
+                        _thread.start_new_thread(bot.bot_thread_entry,(arg_list[0],6667,arg_list[1],arg_list[2],arg_list[3],) )
+                    except NameError:
+                        thread.start_new_thread(bot.bot_thread_entry,(arg_list[0],6667,arg_list[1],arg_list[2],arg_list[3],) )
                     success=False
                     while not success:
                         try:
@@ -91,6 +98,16 @@ class interpreter(threading.Thread):
                     self.bot.irc_message( ":"+arg_list[0],arg_list[1])
                 elif name == "/print":
                     print ( arg_list[0] )
+                elif name == "/help":
+                    print ( "available builtin functions:\n"+
+                            "/connect( host, user, nick, chan )\n"+
+                            "/nick( nick ) ## set nick \n"+
+                            "/user( user ) ## set user\n"+
+                            "/join( chan ) ## join chan\n"+
+                            "/say ( msg, chan) ## sends message to chan\n"+
+                            "/print(msg)## prints msg to stdout\n"+
+                            "/quit() ## quit\n"+
+                            "/help() ## displays this message\n")
                 elif name == "/quit":
                     self.bot.close()
                     sys.exit(0)
