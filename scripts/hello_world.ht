@@ -1,0 +1,9 @@
+## simple hatescript script
+## Note that there are no " " string types so adding whitespaces will affect the program
+CHAN=#hate-test
+/print(join #hate-test) ## print hello
+/connect(irc.freenode.net,botty botty botty :Python IRC,bot_test,CHAN)
+/say(hello IRC,CHAN)
+/say(hello IRC again,CHAN)
+
+##/test ## cause SyntaxError

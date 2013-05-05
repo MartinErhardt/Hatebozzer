@@ -2,18 +2,18 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from bot import bot
+from bot import irc_bot
+from script_parser import interpreter
+
 def main():
-    bot_main= bot( "irc.freenode.net",6667,"botty botty botty :Python IRC","hello_nick","#martin3333" )
-    bot_main.start()
+    interpreter_main = interpreter("./scripts/hello_world.ht")
+    interpreter_main.start()
     while 1:
-        try:
-            inp = raw_input()
-        except NameError:
-            inp = input()
-        if inp =="!QUIT": 
-            bot_main.stop()
-            break
+        try:# still on Pyhon 2.X
+            inp = raw_input(">")
+        except NameError:# We are running on Python 3
+            inp = input(">")
+        interpreter_main.interprete_line(inp,0)
     sys.exit(0)
     
 if __name__ == '__main__': main()
