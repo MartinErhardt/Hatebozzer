@@ -4,6 +4,8 @@ CHAN=#hate-test
 /print(join #hate-test) ## print hello
 /connect(irc.freenode.net,botty botty botty :Python IRC,bot_test,CHAN)
 /say(hello IRC,CHAN)
+/nick(hello_botabotty)
 /say(hello IRC again,CHAN)
-
+/say(hello IRC again and again,CHAN)
+/say(hello IRC again and again and again,CHAN)
 ##/test ## cause SyntaxError
